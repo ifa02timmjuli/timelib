@@ -7,6 +7,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int year = -1;
+int month = -1;
+int day = -1;
+
+int *pointerYear = &year;
+int *pointerMonth = &month;
+int *pointerDay = &day;
+
+
 /**
  * @param int year
  * return int
@@ -83,40 +92,44 @@ int day_of_the_year(int day, int month, int year)
 {
     int dayOfTheYear = 0;
 
-    if (exists_date(year, month, day) == 1)
+    //add days for full months, leap year is considered in function get_days_for_month
+    for (int i = 1; i < month; i++)
     {
-        //add days for full months, leap year is considered in function get_days_for_month
-        for (int i = 1; i < month; i++)
-        {
-            dayOfTheYear += get_days_for_month(year, i);
-        }
-
-        //add days of the input "day"
-        dayOfTheYear += day;
+        dayOfTheYear += get_days_for_month(year, i);
     }
-    else dayOfTheYear = -1;
+
+    //add days of the input "day"
+    dayOfTheYear += day;
 
     return dayOfTheYear;
 }
 
+void input_date(int *pointerY, int *pointerM, int *pointerD)
+{
+    do
+    {
+        printf("Enter Year: ");
+        scanf("%i", pointerY);
+        printf("Enter Month: ");
+        scanf("%i", pointerM);
+        printf("Enter Day: ");
+        scanf("%i", pointerD);
+        printf("\n");
+
+        if (exists_date(year, month,day) != 1)
+        {
+            printf("\nInput is not a valid date. Please try again.\n\n\n");
+        }
+    }
+    while (exists_date(year, month,day) != 1);
+}
+
 int main()
 {
-    //inputs for testing, ignore
-//    int year;
-//    int month;
-//    int day;
+    printf("*** Day of the Year ***\n");
 
-    //inputs
-//    printf("*** Day of the Year ***\n");
-//    printf("Enter Year: ");
-//    scanf("%i", &year);
-//    printf("Enter Month: ");
-//    scanf("%i", &month);
-//    printf("Enter Day: ");
-//    scanf("%i", &day);
-//    printf("\n");
-
-    printf("Tag des Jahres: %i\n", day_of_the_year(31, 12, 2020));
+    input_date(pointerYear, pointerMonth,pointerDay);
+    printf("Day of the Year: %i\n", day_of_the_year(day, month, year));
 
     return 0;
 }
