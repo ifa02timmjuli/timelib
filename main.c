@@ -7,15 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int year = -1;
-int month = -1;
-int day = -1;
-
-int *pointerYear = &year;
-int *pointerMonth = &month;
-int *pointerDay = &day;
-
-
 /**
  * @param int year
  * return int
@@ -116,19 +107,23 @@ void input_date(int *pointerY, int *pointerM, int *pointerD)
         scanf("%i", pointerD);
         printf("\n");
 
-        if (exists_date(year, month,day) != 1)
+        if (exists_date(*pointerY, *pointerM, *pointerD) != 1)
         {
             printf("\nInput is not a valid date. Please try again.\n\n\n");
         }
     }
-    while (exists_date(year, month,day) != 1);
+    while (exists_date(*pointerY, *pointerM, *pointerD) != 1);
 }
 
 int main()
 {
+    int year = -1;
+    int month = -1;
+    int day = -1;
+
     printf("*** Day of the Year ***\n");
 
-    input_date(pointerYear, pointerMonth,pointerDay);
+    input_date(&year, &month, &day);
     printf("Day of the Year: %i\n", day_of_the_year(day, month, year));
 
     return 0;
