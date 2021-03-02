@@ -5,6 +5,7 @@
 **/
 
 #include <stdio.h>
+#include "time.h"
 
 /**
  * Function is given a year and returns 0 if it is NOT a leap year,
@@ -57,21 +58,19 @@ int get_days_for_month(int year, int month)
  * Function validates a given date. Year has to be between 1582 and 2400.
  * Returns 1 if date is valid and 0 if not.
  *
- * @param int day
- * @param int month
- * @param int year
+ * @param struct date
  * return int
  **/
-int exists_date(int year, int month, int day)
+int exists_date(struct date inputDate)
 {
-    //boolean for a valid Date, 1 = valid, 0 = invalid
+    //int for a valid Date, 1 = valid, 0 = invalid
     int validBool = 0;
 
-    if (year >= 1582 && year <= 2400)   //validate year
+    if (inputDate.year >= 1582 && inputDate.year <= 2400)   //validate year
     {
-        if (month >= 1 && month <= 12)      //validate month
+        if (inputDate.month >= 1 && inputDate.month <= 12)      //validate month
         {
-            if (day >= 1 && day <= get_days_for_month(year, month))   //validate day
+            if (inputDate.day >= 1 && inputDate.day <= get_days_for_month(inputDate.year, inputDate.month))   //validate day
             {
                 validBool = 1;
             }
@@ -82,53 +81,54 @@ int exists_date(int year, int month, int day)
 }
 
 /**
- * Function is given a year, a month and a day and returns the day of the year.
+ * Function is given a struct date and returns the day of the year.
  *
- * @param int day
- * @param int month
- * @param int year
+ * @param struct date inputDate
  * return int
  **/
-int day_of_the_year(int day, int month, int year)
+int day_of_the_year(struct date inputDate)
 {
     int dayOfTheYear = 0;
+    int year = inputDate.year;
 
     //add days for full months, leap year is considered in function get_days_for_month
-    for (int i = 1; i < month; i++)
+    for (int i = 1; i < inputDate.month; i++)
     {
         dayOfTheYear += get_days_for_month(year, i);
     }
 
-    //add days of the input "day"
-    dayOfTheYear += day;
+    //add days of the inputDate
+    dayOfTheYear += inputDate.day;
 
     return dayOfTheYear;
 }
 
 /**
- * Function is given a pointer to a year, a month and a day and writes user inputs to year, month and day
+ * Function initializes a struct date and writes user inputs to year, month and day of this struct
  * until the user inputs are valid
  *
- * @param int *year
- * @param int *month
- * @param int *day
+ * return struct date
  **/
-void input_date(int *pointerY, int *pointerM, int *pointerD)
+struct date input_date()
 {
+    struct date inputDate;
+
     do
     {
         printf("Enter Year: ");
-        scanf("%i", pointerY);
+        scanf("%i", &inputDate.year);
         printf("Enter Month: ");
-        scanf("%i", pointerM);
+        scanf("%i", &inputDate.month);
         printf("Enter Day: ");
-        scanf("%i", pointerD);
+        scanf("%i", &inputDate.day);
         printf("\n");
 
-        if (exists_date(*pointerY, *pointerM, *pointerD) != 1)
+        if (exists_date(inputDate) != 1)
         {
             printf("\nInput is not a valid date. Please try again.\n\n\n");
         }
     }
-    while (exists_date(*pointerY, *pointerM, *pointerD) != 1);
+    while (exists_date(inputDate) != 1);
+
+    return inputDate;
 }
