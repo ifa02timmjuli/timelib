@@ -41,12 +41,12 @@ int get_days_for_month(int year, int month)
 {
     int daysOfMonth = -1;
 
-    //Arrays of days per month
+    //Arrays of days per month in a year e.G. 31 for January on index 0 etc
     int daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     daysOfMonth = daysPerMonth[month-1];
 
-    if (is_leapyear(year) == 1 && month == 2)
+    if (is_leapyear(year) == 1 && month == 2) //sets days of moth to 29, if year is a leap year and the month is february
     {
         daysOfMonth = 29;
     }
@@ -55,7 +55,8 @@ int get_days_for_month(int year, int month)
 }
 
 /**
- * Function validates a given date. Year has to be between 1582 and 2400.
+ * Function validates a given struct date. Year has to be between 1582 and 2400.
+ * The Month has to be between 1 and 12. The day between 1 and max. day of given month.
  * Returns 1 if date is valid and 0 if not.
  *
  * @param struct date
@@ -89,7 +90,7 @@ int exists_date(struct date inputDate)
 int day_of_the_year(struct date inputDate)
 {
     int dayOfTheYear = 0;
-    int year = inputDate.year;
+    int year = inputDate.year; //initialize int year, so the struct value year can be passed to the get_days_for_month function
 
     //add days for full months, leap year is considered in function get_days_for_month
     for (int i = 1; i < inputDate.month; i++)
@@ -111,10 +112,11 @@ int day_of_the_year(struct date inputDate)
  **/
 struct date input_date()
 {
-    struct date inputDate;
+    struct date inputDate; //declare a struct date
 
     do
     {
+        //get user inputs and store in struct date inputDate
         printf("Enter Year: ");
         scanf("%i", &inputDate.year);
         printf("Enter Month: ");
@@ -123,12 +125,12 @@ struct date input_date()
         scanf("%i", &inputDate.day);
         printf("\n");
 
-        if (exists_date(inputDate) != 1)
+        if (exists_date(inputDate) != 1) //validating date
         {
             printf("\nInput is not a valid date. Please try again.\n\n\n");
         }
     }
-    while (exists_date(inputDate) != 1);
+    while (exists_date(inputDate) != 1); //demand new user input until date is valid
 
     return inputDate;
 }
